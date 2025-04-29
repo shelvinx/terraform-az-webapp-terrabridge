@@ -42,7 +42,9 @@ jobs:
               run: terraform validate
             
             - name: Terraform Plan
-              run: terraform plan --out tfplan -no-color
+              id: plan
+              run: terraform plan --out=tfplan -no-color
 
-            - name: Terraform Apply
+            - name: Terraform Apply (only if changes)
+              if: success() && steps.plan.outputs.exitcode == '2'
               run: terraform apply tfplan
