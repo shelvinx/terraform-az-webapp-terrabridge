@@ -17,7 +17,7 @@ jobs:
         env:
             TF_LOG: "INFO"
             TF_INPUT: false
-
+            
         steps:
             - name: Code Checkout
               uses: actions/checkout@v4
@@ -40,6 +40,9 @@ jobs:
             
             - name: Terraform Validate
               run: terraform validate
+            
+            - name: Terraform Plan
+              run: terraform plan --out tfplan -no-color
 
             - name: Terraform Apply
-              run: terraform apply --auto-approve
+              run: terraform apply tfplan --auto-approve
