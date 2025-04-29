@@ -1,0 +1,50 @@
+# This is a GitHub Actions workflow file
+name: Deploy to Azure
+
+on:
+    push:
+        branches:
+            - main
+    workflow_dispatch:
+
+jobs:
+    terraform-deploy:
+        runs-on: ubuntu-latest
+        environment: Azure
+        permissions:
+            id-token: write
+            contents: read
+        env:
+            TF_LOG: "INFO"
+            TF_INPUT: false
+            client-id: ${{ secrets.AZURE_CLIENT_ID }}
+            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+            cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+        steps:
+            - name: Code Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Azure CLI OIDC
+              uses: azure/login@v2
+
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v3
+              with:
+                terraform_version: 1.11.4
+
+            - name: Terraform Format
+              run: terraform fmt -check
+            
+            - name: Terraform Init
+              run: terraform init
+            
+            - name: Terraform Validate
+              run: terraform validate
+            
+            - name: Terraform Plan
+              run: terraform plan -no-color
+
+            - name: Terraform Apply
+              run: terraform apply --auto-approve
