@@ -11,31 +11,31 @@ variable "HCP_CLIENT_ID" {
 }
 
 variable "suffix_workload" {
-  type = string
+  type        = string
   description = "Suffix for the workload"
 }
 
 variable "location" {
-  type = string
+  type        = string
   description = "Location for the resource group"
 }
 
 variable "tags" {
-  type = map(string)
+  type        = map(string)
   description = "Tags for the resource group"
 }
 
 variable "webapp_name" {
-  type = string
+  type        = string
   description = "Name for the web app"
 }
 
 variable "github_repository" {
-  type = string
+  type        = string
   description = "GitHub repository for the web app"
 }
 
 variable "port" {
-  type = string
+  type        = string
   description = "Port for the web app"
 }
